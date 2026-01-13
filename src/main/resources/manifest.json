@@ -1,0 +1,13 @@
+{
+  "SchemaVersion": 1,
+  "Plugin": "${plugin_group}:${plugin_name}",
+  "Entrypoint": "${plugin_main_entrypoint}",
+  "Version": "${plugin_version}",
+  "Authors": ["${plugin_author}"],
+  "Description": "${plugin_description}",
+  "Website": "${plugin_website}",
+  "ServerVersion": "${server_version}",
+  "Dependencies": {
+    "AmoAster:HyKot": "*"
+  }
+}
