@@ -1,6 +1,6 @@
 # Kytale
 
-Kotlin Hytale Mod Template powered by [Kytale](https://github.com/AmoAster/Kytale).
+Kotlin Hytale Mod Template powered by [Kytale](https://github.com/briarss/Kytale).
 
 ## Quick Start
 
