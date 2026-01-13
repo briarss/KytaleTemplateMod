@@ -1,6 +1,6 @@
 # Kytale
 
-Kotlin Hytale Mod Template powered by [HyKot](https://github.com/AmoAster/HyKot).
+Kotlin Hytale Mod Template powered by [Kytale](https://github.com/AmoAster/Kytale).
 
 ## Quick Start
 
@@ -17,23 +17,23 @@ Kotlin Hytale Mod Template powered by [HyKot](https://github.com/AmoAster/HyKot)
 
 ## Development Setup
 
-This template uses Gradle composite builds to include HyKot for development.
+This template uses Gradle composite builds to include Kytale for development.
 
 By default, `settings.gradle.kts` includes:
 ```kotlin
-includeBuild("../HyKot") {
+includeBuild("../Kytale") {
     dependencySubstitution {
-        substitute(module("aster.amo:HyKot")).using(project(":"))
+        substitute(module("aster.amo:Kytale")).using(project(":"))
     }
 }
 ```
 
-**For development:** Clone HyKot to `../HyKot` (sibling directory).
+**For development:** Clone Kytale to `../Kytale` (sibling directory).
 
 **For distribution:** Comment out the `includeBuild` block and use CurseMaven:
 ```kotlin
 dependencies {
-    compileOnly("curse.maven:hykot-PROJECTID:FILEID")
+    compileOnly("curse.maven:kytale-PROJECTID:FILEID")
 }
 ```
 
@@ -58,10 +58,10 @@ src/main/resources/
 
 gradle.properties           # Mod configuration
 build.gradle.kts            # Build configuration with hydrate task
-settings.gradle.kts         # Gradle settings with HyKot composite build
+settings.gradle.kts         # Gradle settings with Kytale composite build
 ```
 
-## Features (via HyKot)
+## Features (via Kytale)
 
 - Kotlin stdlib, reflect, and coroutines
 - kotlinx.serialization for JSON configuration

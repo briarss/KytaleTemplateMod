@@ -1,9 +1,9 @@
 package com.example.template
 
-import aster.amo.hykot.KotlinPlugin
-import aster.amo.hykot.dsl.command
-import aster.amo.hykot.dsl.events
-import aster.amo.hykot.extension.info
+import aster.amo.kytale.KotlinPlugin
+import aster.amo.kytale.dsl.command
+import aster.amo.kytale.dsl.events
+import aster.amo.kytale.extension.info
 import com.hypixel.hytale.server.core.Message
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit

@@ -17,11 +17,11 @@ repositories {
 }
 
 dependencies {
-    // HyKot - Kotlin language loader
+    // Kytale - Kotlin language loader
     // Uses composite build (see settings.gradle.kts) for development
     // For distribution: comment out includeBuild in settings.gradle.kts
-    // and use CurseMaven: compileOnly("curse.maven:hykot-PROJECTID:FILEID")
-    compileOnly("aster.amo:HyKot")
+    // and use CurseMaven: compileOnly("curse.maven:kytale-PROJECTID:FILEID")
+    compileOnly("aster.amo:Kytale")
 
     // Compile-only annotations
     compileOnly(libs.jetbrains.annotations)
@@ -147,10 +147,10 @@ tasks.register("hydrate") {
         val mainClassContent = """
             |package $packageName
             |
-            |import aster.amo.hykot.KotlinPlugin
-            |import aster.amo.hykot.dsl.command
-            |import aster.amo.hykot.dsl.events
-            |import aster.amo.hykot.extension.info
+            |import aster.amo.kytale.KotlinPlugin
+            |import aster.amo.kytale.dsl.command
+            |import aster.amo.kytale.dsl.events
+            |import aster.amo.kytale.extension.info
             |import com.hypixel.hytale.server.core.Message
             |import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent
             |import com.hypixel.hytale.server.core.plugin.JavaPluginInit
@@ -199,7 +199,7 @@ tasks.register("hydrate") {
 
         println("\n✓ Project hydrated successfully!")
         println("\nNext steps:")
-        println("  1. Add HyKot dependency to build.gradle.kts (uncomment and set PROJECTID:FILEID)")
+        println("  1. Add Kytale dependency to build.gradle.kts (uncomment and set PROJECTID:FILEID)")
         println("  2. Run: ./gradlew build")
         println("  3. Copy JAR from build/libs/ to your Hytale mods folder")
     }

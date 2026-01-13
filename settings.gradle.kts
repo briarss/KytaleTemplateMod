@@ -9,9 +9,9 @@ pluginManagement {
 
 rootProject.name = "template-mod"
 
-// Include HyKot for development (comment out for distribution)
-includeBuild("../HyKot") {
+// Include Kytale for development (comment out for distribution)
+includeBuild("../Kytale") {
     dependencySubstitution {
-        substitute(module("aster.amo:HyKot")).using(project(":"))
+        substitute(module("aster.amo:Kytale")).using(project(":"))
     }
 }
