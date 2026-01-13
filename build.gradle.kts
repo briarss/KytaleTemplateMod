@@ -17,8 +17,11 @@ repositories {
 }
 
 dependencies {
-    // HyKot - Kotlin language loader (replace PROJECTID:FILEID with actual values)
-    // compileOnly("curse.maven:hykot-PROJECTID:FILEID")
+    // HyKot - Kotlin language loader
+    // Uses composite build (see settings.gradle.kts) for development
+    // For distribution: comment out includeBuild in settings.gradle.kts
+    // and use CurseMaven: compileOnly("curse.maven:hykot-PROJECTID:FILEID")
+    compileOnly("aster.amo:HyKot")
 
     // Compile-only annotations
     compileOnly(libs.jetbrains.annotations)
@@ -147,9 +150,9 @@ tasks.register("hydrate") {
             |import aster.amo.hykot.KotlinPlugin
             |import aster.amo.hykot.dsl.command
             |import aster.amo.hykot.dsl.events
-            |import aster.amo.hykot.dsl.on
+            |import aster.amo.hykot.extension.info
             |import com.hypixel.hytale.server.core.Message
-            |import com.hypixel.hytale.server.core.event.PlayerConnectEvent
+            |import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent
             |import com.hypixel.hytale.server.core.plugin.JavaPluginInit
             |
             |class $className(init: JavaPluginInit) : KotlinPlugin(init) {
@@ -158,7 +161,7 @@ tasks.register("hydrate") {
             |        super.setup()
             |
             |        events {
-            |            on<PlayerConnectEvent> { event ->
+            |            on { event: PlayerConnectEvent ->
             |                logger.info { "Player connected: ${'$'}{event.playerRef.uuid}" }
             |            }
             |        }

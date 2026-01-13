@@ -3,9 +3,9 @@ package com.example.template
 import aster.amo.hykot.KotlinPlugin
 import aster.amo.hykot.dsl.command
 import aster.amo.hykot.dsl.events
-import aster.amo.hykot.dsl.on
+import aster.amo.hykot.extension.info
 import com.hypixel.hytale.server.core.Message
-import com.hypixel.hytale.server.core.event.PlayerConnectEvent
+import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit
 
 /**
@@ -17,7 +17,7 @@ class TemplateMod(init: JavaPluginInit) : KotlinPlugin(init) {
         super.setup()
 
         events {
-            on<PlayerConnectEvent> { event ->
+            on { event: PlayerConnectEvent ->
                 logger.info { "Player connected: ${event.playerRef.uuid}" }
             }
         }

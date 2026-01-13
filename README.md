@@ -10,11 +10,32 @@ Kotlin Hytale Mod Template powered by [HyKot](https://github.com/AmoAster/HyKot)
    ./gradlew hydrate
    ```
 3. Follow the prompts to set your mod name, package, and author
-4. Update `build.gradle.kts` with your HyKot CurseMaven dependency
-5. Build your mod:
+4. Build your mod:
    ```bash
    ./gradlew build
    ```
+
+## Development Setup
+
+This template uses Gradle composite builds to include HyKot for development.
+
+By default, `settings.gradle.kts` includes:
+```kotlin
+includeBuild("../HyKot") {
+    dependencySubstitution {
+        substitute(module("aster.amo:HyKot")).using(project(":"))
+    }
+}
+```
+
+**For development:** Clone HyKot to `../HyKot` (sibling directory).
+
+**For distribution:** Comment out the `includeBuild` block and use CurseMaven:
+```kotlin
+dependencies {
+    compileOnly("curse.maven:hykot-PROJECTID:FILEID")
+}
+```
 
 ## Manual Setup
 
@@ -36,7 +57,8 @@ src/main/resources/
 └── manifest.json           # Hytale mod manifest (auto-populated)
 
 gradle.properties           # Mod configuration
-build.gradle.kts           # Build configuration with hydrate task
+build.gradle.kts            # Build configuration with hydrate task
+settings.gradle.kts         # Gradle settings with HyKot composite build
 ```
 
 ## Features (via HyKot)
@@ -59,7 +81,7 @@ class MyMod(init: JavaPluginInit) : KotlinPlugin(init) {
         super.setup()
 
         events {
-            on<PlayerConnectEvent> { event ->
+            on { event: PlayerConnectEvent ->
                 logger.info { "Welcome ${event.playerRef.uuid}!" }
             }
         }
@@ -73,7 +95,7 @@ class MyMod(init: JavaPluginInit) : KotlinPlugin(init) {
 
     override fun start() {
         super.start()
-        logger.info { "MyMod v${version} started!" }
+        logger.info { "MyMod started!" }
     }
 }
 
