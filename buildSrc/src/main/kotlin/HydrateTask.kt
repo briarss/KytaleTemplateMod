@@ -118,6 +118,11 @@ abstract class HydrateTask : DefaultTask() {
 
     private fun applyFileReplacements(content: String): String {
         return content
+            // Replace escaped versions (in .gradle.kts files)
+            .replace("\\${'$'}plugin_name\\${'$'}", pluginName)
+            .replace("\\${'$'}plugin_group\\${'$'}", pluginGroup)
+            .replace("\\${'$'}plugin_package\\${'$'}", pluginPackage)
+            // Replace unescaped versions (in .kt files)
             .replace("\$plugin_name\$", pluginName)
             .replace("\$plugin_group\$", pluginGroup)
             .replace("\$plugin_package\$", pluginPackage)

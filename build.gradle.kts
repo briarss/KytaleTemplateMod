@@ -76,7 +76,7 @@ hytale {
 // Kytale UI Plugin Configuration
 kytaleUi {
     // Package(s) to scan for @UiDefinition classes (faster builds)
-    packages.set(listOf("$plugin_package$.ui"))
+    packages.set(listOf("\$plugin_package\$.ui"))
 
     // Output directory for generated .ui files (this is the default)
     // outputDir.set(file("src/main/resources/Common/UI/Custom/Pages"))
