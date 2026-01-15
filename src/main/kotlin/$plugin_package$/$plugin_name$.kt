@@ -1,4 +1,4 @@
-package com.example.template
+package $plugin_package$
 
 import aster.amo.hexweave.enableHexweave
 import aster.amo.kytale.KotlinPlugin
@@ -7,9 +7,9 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit
 
 /**
- * Template mod - run `./gradlew hydrate` to customize this project.
+ * $plugin_name$ - A Kytale mod for Hytale.
  */
-class TemplateMod(init: JavaPluginInit) : KotlinPlugin(init) {
+class $plugin_name$(init: JavaPluginInit) : KotlinPlugin(init) {
 
     override fun setup() {
         super.setup()
@@ -24,7 +24,7 @@ class TemplateMod(init: JavaPluginInit) : KotlinPlugin(init) {
             commands {
                 literal("hello", "Say hello") {
                     executesPlayer {
-                        sendMessage(Message.raw("Hello from TemplateMod!"))
+                        sendMessage(Message.raw("Hello from $plugin_name$!"))
                     }
                 }
             }
@@ -33,11 +33,11 @@ class TemplateMod(init: JavaPluginInit) : KotlinPlugin(init) {
 
     override fun start() {
         super.start()
-        logger.atInfo().log("TemplateMod started!")
+        logger.atInfo().log("$plugin_name$ started!")
     }
 
     override fun shutdown() {
-        logger.atInfo().log("TemplateMod shutting down...")
+        logger.atInfo().log("$plugin_name$ shutting down...")
         super.shutdown()
     }
 }

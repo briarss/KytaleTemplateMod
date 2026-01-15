@@ -10,7 +10,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "template-mod"
+rootProject.name = "$plugin_name$"
 
 // Uncomment for local development with Kytale source:
 // includeBuild("../Kytale") {
