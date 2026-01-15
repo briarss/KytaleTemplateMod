@@ -1,9 +1,7 @@
 package com.example.template
 
+import aster.amo.hexweave.enableHexweave
 import aster.amo.kytale.KotlinPlugin
-import aster.amo.kytale.dsl.command
-import aster.amo.kytale.dsl.events
-import aster.amo.kytale.extension.info
 import com.hypixel.hytale.server.core.Message
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit
@@ -16,26 +14,30 @@ class TemplateMod(init: JavaPluginInit) : KotlinPlugin(init) {
     override fun setup() {
         super.setup()
 
-        events {
-            on { event: PlayerConnectEvent ->
-                logger.info { "Player connected: ${event.playerRef.uuid}" }
+        enableHexweave {
+            events {
+                listen<PlayerConnectEvent> {
+                    plugin.logger.atInfo().log("Player connected: ${event.playerRef.uuid}")
+                }
             }
-        }
 
-        command("hello", "Say hello") {
-            executes { ctx ->
-                ctx.sendMessage(Message.raw("Hello from TemplateMod!"))
+            commands {
+                literal("hello", "Say hello") {
+                    executesPlayer {
+                        sendMessage(Message.raw("Hello from TemplateMod!"))
+                    }
+                }
             }
         }
     }
 
     override fun start() {
         super.start()
-        logger.info { "TemplateMod started!" }
+        logger.atInfo().log("TemplateMod started!")
     }
 
     override fun shutdown() {
-        logger.info { "TemplateMod shutting down..." }
+        logger.atInfo().log("TemplateMod shutting down...")
         super.shutdown()
     }
 }

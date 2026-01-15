@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hytale.mod)
+    alias(libs.plugins.kytale.ui)
 }
 
 group = findProperty("plugin_group") as String
@@ -10,18 +11,20 @@ val javaVersion = 24
 
 repositories {
     mavenCentral()
-    maven("https://cursemaven.com")
+    maven("https://maven.pokeskies.com/releases") {
+        name = "PokeSkies"
+    }
     maven("https://maven.hytale-modding.info/releases") {
         name = "HytaleModdingReleases"
     }
 }
 
 dependencies {
-    // Kytale - Kotlin language loader
-    // Uses composite build (see settings.gradle.kts) for development
-    // For distribution: comment out includeBuild in settings.gradle.kts
-    // and use CurseMaven: compileOnly("curse.maven:kytale-PROJECTID:FILEID")
-    compileOnly("aster.amo:Kytale")
+    // Kytale - Kotlin language loader (runtime dependency, provided by Kytale mod)
+    compileOnly(libs.kytale)
+
+    // Hexweave - DSL framework for events, commands, tasks, and ECS systems
+    compileOnly(libs.hexweave)
 
     // Compile-only annotations
     compileOnly(libs.jetbrains.annotations)
@@ -59,6 +62,15 @@ tasks.named<ProcessResources>("processResources") {
 
 hytale {
 
+}
+
+// Kytale UI Plugin Configuration
+kytaleUi {
+    // Package(s) to scan for @UiDefinition classes (faster builds)
+    packages.set(listOf("com.example.template.ui"))
+
+    // Output directory for generated .ui files (this is the default)
+    // outputDir.set(file("src/main/resources/Common/UI/Custom/Pages"))
 }
 
 // =============================================================================
@@ -142,15 +154,17 @@ tasks.register("hydrate") {
         val newSrcDir = file("src/main/kotlin/$packagePath")
         newSrcDir.mkdirs()
 
+        // Create UI package
+        val uiDir = file("src/main/kotlin/$packagePath/ui")
+        uiDir.mkdirs()
+
         // Create main class
         val mainClassFile = file("src/main/kotlin/$packagePath/$className.kt")
         val mainClassContent = """
             |package $packageName
             |
+            |import aster.amo.hexweave.enableHexweave
             |import aster.amo.kytale.KotlinPlugin
-            |import aster.amo.kytale.dsl.command
-            |import aster.amo.kytale.dsl.events
-            |import aster.amo.kytale.extension.info
             |import com.hypixel.hytale.server.core.Message
             |import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent
             |import com.hypixel.hytale.server.core.plugin.JavaPluginInit
@@ -160,31 +174,69 @@ tasks.register("hydrate") {
             |    override fun setup() {
             |        super.setup()
             |
-            |        events {
-            |            on { event: PlayerConnectEvent ->
-            |                logger.info { "Player connected: ${'$'}{event.playerRef.uuid}" }
+            |        enableHexweave {
+            |            events {
+            |                listen<PlayerConnectEvent> {
+            |                    plugin.logger.atInfo().log("Player connected: ${'$'}{event.playerRef.uuid}")
+            |                }
             |            }
-            |        }
             |
-            |        command("hello", "Say hello") {
-            |            executes { ctx ->
-            |                ctx.sendMessage(Message.raw("Hello from $modName!"))
+            |            commands {
+            |                literal("hello", "Say hello") {
+            |                    executesPlayer {
+            |                        sendMessage(Message.raw("Hello from $modName!"))
+            |                    }
+            |                }
             |            }
             |        }
             |    }
             |
             |    override fun start() {
             |        super.start()
-            |        logger.info { "$modName started!" }
+            |        logger.atInfo().log("$modName started!")
             |    }
             |
             |    override fun shutdown() {
-            |        logger.info { "$modName shutting down..." }
+            |        logger.atInfo().log("$modName shutting down...")
             |        super.shutdown()
             |    }
             |}
         """.trimMargin()
         mainClassFile.writeText(mainClassContent)
+
+        // Create example UI definition
+        val exampleUiFile = file("src/main/kotlin/$packagePath/ui/ExampleUi.kt")
+        val exampleUiContent = """
+            |package $packageName.ui
+            |
+            |import aster.amo.kytale.ui.dsl.*
+            |
+            |@UiDefinition("$modName/ExamplePage")
+            |fun examplePage() = interactiveUiPage("example-page") {
+            |    group {
+            |        layoutMode = LayoutMode.Top
+            |        padding = UiPadding(top = 20, left = 20, right = 20, bottom = 20)
+            |
+            |        label {
+            |            text = "$modName UI"
+            |            style = UiLabelStyle().apply {
+            |                fontSize = 24
+            |                textColor = "#ffffff"
+            |                renderBold = true
+            |            }
+            |        }
+            |
+            |        textButton("click-me") {
+            |            primaryButton("Click Me!")
+            |            onClick = {
+            |                // Handle button click
+            |                // 'player' and 'playerRef' are available in this context
+            |            }
+            |        }
+            |    }
+            |}
+        """.trimMargin()
+        exampleUiFile.writeText(exampleUiContent)
 
         // Clean up template files
         if (oldSrcDir.exists() && oldSrcDir.path != newSrcDir.path) {
@@ -197,10 +249,16 @@ tasks.register("hydrate") {
             }
         }
 
+        // Update kytaleUi packages in build.gradle.kts
+        val buildFile = file("build.gradle.kts")
+        val buildContent = buildFile.readText()
+            .replace("com.example.template.ui", "$packageName.ui")
+        buildFile.writeText(buildContent)
+
         println("\n✓ Project hydrated successfully!")
         println("\nNext steps:")
-        println("  1. Add Kytale dependency to build.gradle.kts (uncomment and set PROJECTID:FILEID)")
-        println("  2. Run: ./gradlew build")
+        println("  1. Run: ./gradlew build")
+        println("  2. Run: ./gradlew compileUi (to generate .ui files)")
         println("  3. Copy JAR from build/libs/ to your Hytale mods folder")
     }
 }
