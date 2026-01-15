@@ -4,7 +4,7 @@ kotlinx-coroutines = "1.9.0"
 kotlinx-serialization = "1.7.3"
 shadow = "9.0.0"
 hytale-mod = "0.+"
-kytale = "1.4.0"
+kytale = "1.4.3"
 
 [libraries]
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.0.2" }

@@ -1,27 +1,56 @@
 package $plugin_package$.ui
 
 import aster.amo.kytale.ui.dsl.*
+import com.hypixel.hytale.server.core.Message
 
-@UiDefinition("$plugin_name$/ExamplePage")
-fun examplePage() = interactiveUiPage("example-page") {
-    group {
-        layoutMode = LayoutMode.Top
-        padding = UiPadding(top = 20, left = 20, right = 20, bottom = 20)
+/**
+ * Example UI pages for $plugin_name$.
+ */
+@UiDefinition
+object $plugin_name$Ui {
 
-        label {
-            text = "$plugin_name$ UI"
-            style = UiLabelStyle().apply {
-                fontSize = 24
-                textColor = "#ffffff"
-                renderBold = true
+    fun registerAll() {
+        InteractiveUiRegistry.register("$plugin_name$/ExamplePage", examplePage)
+    }
+
+    val examplePage = interactivePage("ExamplePage") {
+        width = 400
+        height = 300
+
+        title {
+            label {
+                text = "$plugin_name$"
+                style = UiLabelStyle(
+                    fontSize = 24,
+                    textColor = "#ffffff",
+                    renderBold = true,
+                    horizontalAlignment = HorizontalAlignment.Center
+                )
             }
         }
 
-        textButton("click-me") {
-            primaryButton("Click Me!")
-            onClick = {
-                // Handle button click
-                // 'player' and 'playerRef' are available in this context
+        content {
+            group("MainContent") {
+                layoutMode = LayoutMode.Top
+                padding = UiPadding(horizontal = 16, vertical = 12)
+
+                label {
+                    text = "Welcome to $plugin_name$!"
+                    style = UiLabelStyle(fontSize = 14, textColor = "#ffffff")
+                }
+
+                group {
+                    layoutMode = LayoutMode.Left
+                    padding = UiPadding(top = 16)
+
+                    textButton("click-me") {
+                        primaryButton("Click Me!")
+                        anchor = UiAnchor(width = 120, height = 36)
+                        onClick = {
+                            player.sendMessage(Message.raw("Button clicked!").color("55FF55"))
+                        }
+                    }
+                }
             }
         }
     }
